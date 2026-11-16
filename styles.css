@@ -52,23 +52,143 @@ a:hover {
   margin: 0 auto;
 }
 
-/* Two-frame line boil: instant swap every 0.44s, frozen when Reduce Motion is on.
-   Full cycle is 0.88s so each frame holds for 0.44s, matching the app. */
+
+/* Two-frame line boil: swap two hand-drawn imperfect outlines every 0.44s.
+   Neither frame is a perfect rectangle or a transform/rotate jiggle.
+   prefers-reduced-motion freezes on frame 0. */
 .boil {
-  animation: boil 0.88s steps(1, end) infinite;
+  animation-duration: 0.88s;
+  animation-timing-function: steps(1, end);
+  animation-iteration-count: infinite;
 }
 
-@keyframes boil {
-  0%,
-  49.999% {
-    transform: translate(0, 0) rotate(-0.35deg);
-    border-radius: 22px 26px 20px 25px / 25px 20px 26px 22px;
-  }
-  50%,
-  100% {
-    transform: translate(1px, -1px) rotate(0.35deg);
-    border-radius: 26px 20px 25px 22px / 21px 26px 22px 25px;
-  }
+@keyframes boil-card {
+  0%, 49.999% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%20260%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M29.80%2C3.15%20C185.18%2C12.20%20219.70%2C12.78%20375.08%2C8.96%20C387.75%2C8.96%20395.95%2C17.15%20395.95%2C29.82%20C387.92%2C123.17%20387.51%2C143.92%20391.83%2C237.27%20C391.83%2C245.14%20382.84%2C254.14%20374.96%2C254.14%20C216.15%2C249.98%20180.85%2C249.58%2022.04%2C250.14%20C12.63%2C250.14%202.43%2C239.93%202.43%2C230.53%20C-4.80%2C139.13%20-4.49%2C118.82%205.53%2C27.42%20C5.53%2C15.83%2018.21%2C3.15%2029.80%2C3.15%20Z%22%20fill%3D%22%23f7f4ec%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+  50%, 100% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%20260%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M21.42%2C8.51%20C178.26%2C3.32%20213.11%2C2.67%20369.95%2C1.99%20C384.60%2C1.99%20394.45%2C11.84%20394.45%2C26.49%20C407.85%2C118.13%20408.28%2C138.49%20398.79%2C230.13%20C398.79%2C243.09%20388.34%2C253.55%20375.37%2C253.55%20C222.73%2C265.11%20188.80%2C265.51%2036.16%2C257.49%20C21.27%2C257.49%2010.26%2C246.47%2010.26%2C231.59%20C-4.73%2C139.23%20-5.40%2C118.71%203.57%2C26.36%20C3.57%2C15.30%2010.37%2C8.51%2021.42%2C8.51%20Z%22%20fill%3D%22%23f7f4ec%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+}
+@keyframes boil-btn {
+  0%, 49.999% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20360%2080%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M27.81%2C7.26%20C167.66%2C5.53%20198.74%2C5.48%20338.58%2C6.80%20C346.98%2C6.80%20353.91%2C13.73%20353.91%2C22.13%20C354.04%2C38.19%20354.08%2C41.76%20354.29%2C57.82%20C354.29%2C66.63%20345.62%2C75.30%20336.81%2C75.30%20C194.27%2C69.83%20162.59%2C69.62%2020.04%2C73.15%20C12.69%2C73.15%205.86%2C66.32%205.86%2C58.96%20C3.53%2C44.86%203.69%2C41.73%207.44%2C27.63%20C7.44%2C17.55%2017.73%2C7.26%2027.81%2C7.26%20Z%22%20fill%3D%22%23f04b5b%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+  50%, 100% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20360%2080%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M20.17%2C6.09%20C162.72%2C8.51%20194.40%2C8.49%20336.96%2C5.92%20C345.59%2C5.92%20353.83%2C14.16%20353.83%2C22.79%20C355.37%2C39.36%20355.46%2C43.05%20354.81%2C59.62%20C354.81%2C68.23%20349.72%2C73.32%20341.11%2C73.32%20C197.30%2C73.88%20165.35%2C74.02%2021.55%2C74.75%20C12.19%2C74.75%205.27%2C67.84%205.27%2C58.48%20C5.52%2C41.94%205.45%2C38.27%204.53%2C21.73%20C4.53%2C12.61%2011.05%2C6.09%2020.17%2C6.09%20Z%22%20fill%3D%22%23f04b5b%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+}
+@keyframes boil-shot {
+  0%, 49.999% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%20300%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M19.19%2C2.23%20C92.31%2C-2.45%20108.56%2C-2.13%20181.68%2C5.43%20C188.43%2C5.43%20195.93%2C12.93%20195.93%2C19.69%20C190.88%2C135.91%20190.35%2C161.74%20190.60%2C277.96%20C190.60%2C285.78%20184.22%2C292.16%20176.41%2C292.16%20C104.15%2C288.46%2088.09%2C288.54%2015.83%2C292.98%20C9.10%2C292.98%202.64%2C286.52%202.64%2C279.79%20C-0.15%2C162.00%20-0.08%2C135.82%203.39%2C18.03%20C3.39%2C8.10%209.25%2C2.23%2019.19%2C2.23%20Z%22%20fill%3D%22%23f7f4ec%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+  50%, 100% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%20300%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M25.48%2C2.92%20C93.92%2C15.66%20109.12%2C15.88%20177.56%2C5.05%20C189.83%2C5.05%20197.57%2C12.78%20197.57%2C25.06%20C199.40%2C136.01%20199.40%2C160.66%20197.58%2C271.61%20C197.58%2C282.82%20189.20%2C291.20%20177.99%2C291.20%20C107.66%2C298.13%2092.03%2C298.62%2021.70%2C296.09%20C13.05%2C296.09%203.84%2C286.88%203.84%2C278.23%20C11.65%2C163.11%2011.87%2C137.52%206.00%2C22.40%20C6.00%2C10.53%2013.62%2C2.92%2025.48%2C2.92%20Z%22%20fill%3D%22%23f7f4ec%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+}
+@keyframes boil-chip {
+  0%, 49.999% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20240%2056%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M27.10%2C5.11%20C110.62%2C9.31%20129.18%2C9.37%20212.70%2C5.75%20C223.63%2C5.75%20234.81%2C16.93%20234.81%2C27.86%20C234.45%2C28.54%20234.46%2C28.70%20234.95%2C29.38%20C234.95%2C39.26%20223.76%2C50.44%20213.89%2C50.44%20C130.00%2C47.84%20111.36%2C47.83%2027.48%2C50.34%20C16.10%2C50.34%204.61%2C38.85%204.61%2C27.48%20C6.82%2C27.07%206.93%2C26.98%205.63%2C26.58%20C5.63%2C14.36%2014.88%2C5.11%2027.10%2C5.11%20Z%22%20fill%3D%22%23f7c93a%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%225%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+  50%, 100% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20240%2056%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M28.72%2C4.27%20C110.25%2C2.68%20128.37%2C2.78%20209.90%2C5.27%20C223.52%2C5.27%20234.03%2C15.78%20234.03%2C29.40%20C232.08%2C30.29%20232.13%2C30.49%20234.54%2C31.37%20C234.54%2C44.20%20226.86%2C51.88%20214.03%2C51.88%20C130.21%2C53.90%20111.59%2C53.84%2027.77%2C51.35%20C14.82%2C51.35%205.26%2C41.79%205.26%2C28.85%20C5.24%2C28.77%205.15%2C28.76%204.31%2C28.68%20C4.31%2C15.44%2015.48%2C4.27%2028.72%2C4.27%20Z%22%20fill%3D%22%23f7c93a%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%225%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+}
+@keyframes boil-icon {
+  0%, 49.999% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20128%20128%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M39.62%2C4.52%20C63.80%2C1.00%2069.18%2C0.93%2093.36%2C3.80%20C109.46%2C3.80%20120.83%2C15.16%20120.83%2C31.27%20C120.82%2C58.28%20120.77%2C64.28%20120.35%2C91.29%20C120.35%2C107.58%20103.83%2C124.10%2087.54%2C124.10%20C62.88%2C117.16%2057.40%2C116.78%2032.74%2C120.38%20C18.72%2C120.38%203.01%2C104.67%203.01%2C90.65%20C-2.19%2C67.88%20-2.08%2C62.82%204.08%2C40.06%20C4.08%2C18.96%2018.53%2C4.52%2039.62%2C4.52%20Z%22%20fill%3D%22%232f3e8f%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%226%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+  50%, 100% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20128%20128%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M36.28%2C6.16%20C63.34%2C13.25%2069.35%2C13.26%2096.41%2C6.21%20C109.52%2C6.21%20123.40%2C20.09%20123.40%2C33.20%20C122.30%2C61.60%20122.21%2C67.91%20122.44%2C96.31%20C122.44%2C111.51%20110.12%2C123.83%2094.92%2C123.83%20C69.48%2C129.80%2063.83%2C129.74%2038.39%2C123.15%20C22.41%2C123.15%205.54%2C106.28%205.54%2C90.30%20C11.66%2C65.29%2011.88%2C59.73%207.73%2C34.72%20C7.73%2C16.77%2018.34%2C6.16%2036.28%2C6.16%20Z%22%20fill%3D%22%232f3e8f%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%226%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+}
+@keyframes boil-paper {
+  0%, 49.999% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20520%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M30.08%2C10.78%20C328.62%2C12.79%20394.97%2C12.01%20693.51%2C2.91%20C707.18%2C2.91%20716.65%2C12.39%20716.65%2C26.06%20C706.27%2C235.76%20705.99%2C282.36%20713.80%2C492.07%20C713.80%2C507.09%20705.01%2C515.87%20690.00%2C515.87%20C395.44%2C502.81%20329.99%2C502.82%2035.43%2C516.01%20C22.35%2C516.01%209.31%2C502.97%209.31%2C489.89%20C14.53%2C285.15%2014.19%2C239.65%205.94%2C34.92%20C5.94%2C20.98%2016.15%2C10.78%2030.08%2C10.78%20Z%22%20fill%3D%22%23f7f4ec%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%228%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+  50%, 100% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20520%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M36.78%2C7.74%20C326.74%2C-3.50%20391.17%2C-3.59%20681.13%2C6.87%20C695.42%2C6.87%20710.45%2C21.90%20710.45%2C36.19%20C712.79%2C238.33%20713.30%2C283.26%20715.63%2C485.40%20C715.63%2C502.49%20701.91%2C516.21%20684.82%2C516.21%20C391.26%2C505.50%20326.02%2C505.51%2032.46%2C516.27%20C21.11%2C516.27%2010.91%2C506.07%2010.91%2C494.72%20C22.70%2C287.86%2022.55%2C241.89%209.50%2C35.02%20C9.50%2C17.78%2019.54%2C7.74%2036.78%2C7.74%20Z%22%20fill%3D%22%23f7f4ec%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%228%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+}
+@keyframes boil-squiggle {
+  0%, 49.999% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%2018%22%20fill%3D%22none%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M4.00%2C10.25%20C67.98%2C9.36%20212.02%2C6.05%20276.00%2C8.87%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M4.00%2C10.25%20C67.98%2C9.36%20212.02%2C6.05%20276.00%2C8.87%22%20stroke%3D%22%23f04b5b%22%20stroke-width%3D%222.75%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+  50%, 100% { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%2018%22%20fill%3D%22none%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M4.00%2C8.06%20C66.67%2C6.28%20208.36%2C7.99%20276.00%2C11.07%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M4.00%2C8.06%20C66.67%2C6.28%20208.36%2C7.99%20276.00%2C11.07%22%20stroke%3D%22%23f04b5b%22%20stroke-width%3D%222.75%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E"); }
+}
+
+.card {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20400%20260%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M29.80%2C3.15%20C185.18%2C12.20%20219.70%2C12.78%20375.08%2C8.96%20C387.75%2C8.96%20395.95%2C17.15%20395.95%2C29.82%20C387.92%2C123.17%20387.51%2C143.92%20391.83%2C237.27%20C391.83%2C245.14%20382.84%2C254.14%20374.96%2C254.14%20C216.15%2C249.98%20180.85%2C249.58%2022.04%2C250.14%20C12.63%2C250.14%202.43%2C239.93%202.43%2C230.53%20C-4.80%2C139.13%20-4.49%2C118.82%205.53%2C27.42%20C5.53%2C15.83%2018.21%2C3.15%2029.80%2C3.15%20Z%22%20fill%3D%22%23f7f4ec%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.card.boil { animation-name: boil-card; }
+
+.btn {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20360%2080%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M27.81%2C7.26%20C167.66%2C5.53%20198.74%2C5.48%20338.58%2C6.80%20C346.98%2C6.80%20353.91%2C13.73%20353.91%2C22.13%20C354.04%2C38.19%20354.08%2C41.76%20354.29%2C57.82%20C354.29%2C66.63%20345.62%2C75.30%20336.81%2C75.30%20C194.27%2C69.83%20162.59%2C69.62%2020.04%2C73.15%20C12.69%2C73.15%205.86%2C66.32%205.86%2C58.96%20C3.53%2C44.86%203.69%2C41.73%207.44%2C27.63%20C7.44%2C17.55%2017.73%2C7.26%2027.81%2C7.26%20Z%22%20fill%3D%22%23f04b5b%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.btn.boil { animation-name: boil-btn; }
+.btn:hover {
+  background-color: transparent;
+  filter: brightness(0.95);
+}
+
+.shot {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20200%20300%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M19.19%2C2.23%20C92.31%2C-2.45%20108.56%2C-2.13%20181.68%2C5.43%20C188.43%2C5.43%20195.93%2C12.93%20195.93%2C19.69%20C190.88%2C135.91%20190.35%2C161.74%20190.60%2C277.96%20C190.60%2C285.78%20184.22%2C292.16%20176.41%2C292.16%20C104.15%2C288.46%2088.09%2C288.54%2015.83%2C292.98%20C9.10%2C292.98%202.64%2C286.52%202.64%2C279.79%20C-0.15%2C162.00%20-0.08%2C135.82%203.39%2C18.03%20C3.39%2C8.10%209.25%2C2.23%2019.19%2C2.23%20Z%22%20fill%3D%22%23f7f4ec%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%227%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.shot.boil { animation-name: boil-shot; }
+.shot img {
+  border-radius: 8px;
+}
+
+.chip {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20240%2056%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M27.10%2C5.11%20C110.62%2C9.31%20129.18%2C9.37%20212.70%2C5.75%20C223.63%2C5.75%20234.81%2C16.93%20234.81%2C27.86%20C234.45%2C28.54%20234.46%2C28.70%20234.95%2C29.38%20C234.95%2C39.26%20223.76%2C50.44%20213.89%2C50.44%20C130.00%2C47.84%20111.36%2C47.83%2027.48%2C50.34%20C16.10%2C50.34%204.61%2C38.85%204.61%2C27.48%20C6.82%2C27.07%206.93%2C26.98%205.63%2C26.58%20C5.63%2C14.36%2014.88%2C5.11%2027.10%2C5.11%20Z%22%20fill%3D%22%23f7c93a%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%225%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.chip.boil { animation-name: boil-chip; }
+
+.hero-icon {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: hidden;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20128%20128%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M39.62%2C4.52%20C63.80%2C1.00%2069.18%2C0.93%2093.36%2C3.80%20C109.46%2C3.80%20120.83%2C15.16%20120.83%2C31.27%20C120.82%2C58.28%20120.77%2C64.28%20120.35%2C91.29%20C120.35%2C107.58%20103.83%2C124.10%2087.54%2C124.10%20C62.88%2C117.16%2057.40%2C116.78%2032.74%2C120.38%20C18.72%2C120.38%203.01%2C104.67%203.01%2C90.65%20C-2.19%2C67.88%20-2.08%2C62.82%204.08%2C40.06%20C4.08%2C18.96%2018.53%2C4.52%2039.62%2C4.52%20Z%22%20fill%3D%22%232f3e8f%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%226%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.hero-icon.boil { animation-name: boil-icon; }
+.hero-icon img {
+  border-radius: 0;
+  /* keep the photo inside the wonky frame; slight inset via padding */
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin: 5px;
+  object-fit: cover;
+}
+
+.paper-page {
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20720%20520%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M30.08%2C10.78%20C328.62%2C12.79%20394.97%2C12.01%20693.51%2C2.91%20C707.18%2C2.91%20716.65%2C12.39%20716.65%2C26.06%20C706.27%2C235.76%20705.99%2C282.36%20713.80%2C492.07%20C713.80%2C507.09%20705.01%2C515.87%20690.00%2C515.87%20C395.44%2C502.81%20329.99%2C502.82%2035.43%2C516.01%20C22.35%2C516.01%209.31%2C502.97%209.31%2C489.89%20C14.53%2C285.15%2014.19%2C239.65%205.94%2C34.92%20C5.94%2C20.98%2016.15%2C10.78%2030.08%2C10.78%20Z%22%20fill%3D%22%23f7f4ec%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%228%22%20stroke-linejoin%3D%22round%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.paper-page.boil { animation-name: boil-paper; }
+
+/* Wordmark: two imperfect underlines, not a rotating/translating title. */
+.wordmark {
+  /* keep text fill + stroke; boil only the underline */
+}
+.wordmark::after {
+  content: "";
+  display: block;
+  width: min(280px, 70%);
+  height: 14px;
+  margin: 8px auto 0;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20280%2018%22%20fill%3D%22none%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M4.00%2C10.25%20C67.98%2C9.36%20212.02%2C6.05%20276.00%2C8.87%22%20stroke%3D%22%2316141c%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M4.00%2C10.25%20C67.98%2C9.36%20212.02%2C6.05%20276.00%2C8.87%22%20stroke%3D%22%23f04b5b%22%20stroke-width%3D%222.75%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.wordmark.boil::after {
+  animation: boil-squiggle 0.88s steps(1, end) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -76,7 +196,8 @@ a:hover {
     scroll-behavior: auto;
   }
   .boil,
-  .boil-slow {
+  .boil-slow,
+  .wordmark.boil::after {
     animation: none !important;
     transform: none !important;
   }
@@ -92,11 +213,7 @@ a:hover {
   width: 128px;
   height: 128px;
   margin: 0 auto 22px;
-  border: 5px solid var(--ink);
-  border-radius: 28px;
-  background: var(--field);
-  box-shadow: 4px 4px 0 var(--ink);
-  overflow: hidden;
+  /* outline + fill come from the two-frame boil SVGs */
 }
 
 .hero-icon img {
@@ -107,15 +224,12 @@ a:hover {
 
 .chip {
   display: inline-block;
-  background: var(--yellow);
   color: var(--ink);
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.04em;
   text-transform: lowercase;
-  padding: 4px 12px;
-  border: 3px solid var(--ink);
-  border-radius: 999px;
+  padding: 6px 16px;
   margin-bottom: 14px;
 }
 
@@ -150,22 +264,17 @@ a:hover {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--coral);
   color: var(--white);
   font-family: inherit;
   font-weight: 700;
   font-size: 22px;
-  padding: 12px 28px;
-  border: 4px solid var(--ink);
-  border-radius: 14px;
-  box-shadow: 4px 4px 0 var(--ink);
+  padding: 14px 32px;
   text-decoration: none;
   cursor: pointer;
 }
 
 .btn:hover {
   color: var(--white);
-  background: #e23d4e;
 }
 
 .btn-ghost {
@@ -195,11 +304,7 @@ a:hover {
 
 .shot {
   width: 200px;
-  background: var(--paper);
-  border: 4px solid var(--ink);
-  border-radius: 16px;
-  padding: 8px 8px 0;
-  box-shadow: 5px 5px 0 var(--ink);
+  padding: 12px 12px 0;
   color: var(--ink);
   text-align: center;
 }
@@ -226,12 +331,8 @@ a:hover {
 }
 
 .card {
-  background: var(--paper);
   color: var(--ink);
-  border: 4px solid var(--ink);
-  border-radius: 20px;
-  padding: 22px 24px 24px;
-  box-shadow: 5px 5px 0 var(--ink);
+  padding: 26px 28px 28px;
 }
 
 .card h2 {
@@ -271,12 +372,8 @@ a:hover {
 }
 
 .paper-page {
-  background: var(--paper);
   color: var(--ink);
-  border: 4px solid var(--ink);
-  border-radius: 24px;
-  padding: 36px 40px;
-  box-shadow: 6px 6px 0 var(--ink);
+  padding: 40px 44px;
   max-width: 720px;
   margin: 0 auto;
 }
